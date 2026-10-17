@@ -1,6 +1,6 @@
 {
-  "name": "Scan Halal",
-  "short_name": "Scan Halal",
+  "name": "Halal Radar",
+  "short_name": "Halal Radar",
   "description": "Scanne un produit ou cherche un additif : halal, douteux ou haram, avec les avis et les sources.",
   "lang": "fr",
   "start_url": "./",
