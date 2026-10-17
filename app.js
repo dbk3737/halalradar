@@ -48,8 +48,8 @@ async function loadData() {
     const terms = new Set();
     (e.alias || []).forEach(a => terms.add(norm(a)));
     const base = norm(e.nom.split("(")[0].trim());
-    if (base.length >= 5) terms.add(base);
-    if (!isE(e)) terms.add(norm(e.nom));
+    if (base.length >= 5 && !(!isE(e) && (e.alias || []).length)) terms.add(base);
+    if (!isE(e) && !(e.alias || []).length) terms.add(norm(e.nom));
     const list = [...terms].filter(t => t.length >= 3);
     if (list.length) matchers.push({ entry: e, re: new RegExp("(^|[^a-z0-9])(" + list.map(esc).join("|") + ")(?![a-z0-9])", "g") });
   }
@@ -123,14 +123,19 @@ function analyse(text, additivesTags) {
   (additivesTags || []).forEach(tag => addCode(tag.replace(/^[a-z]{2}:/, "")));
   for (const m of t.matchAll(/(?:^|[^a-z0-9])(e\s?-?\d{3,4}[a-z]{0,2})(?![a-z0-9])/g)) addCode(m[1]);
 
+  const hits = [];
   for (const { entry, re } of matchers) {
     re.lastIndex = 0;
     for (const m of t.matchAll(re)) {
       const start = m.index + m[1].length;
       if (t.slice(Math.max(0, start - 5), start) === "sans ") continue;   // « sans alcool »
-      found.set(entry.code, entry);
-      break;
+      hits.push({ entry, start, end: start + m[2].length });
     }
+  }
+  // « vinaigre de vin » ne doit pas aussi compter comme « vin » : on garde le terme le plus long
+  for (const h of hits) {
+    const covered = hits.some(o => o.entry !== h.entry && o.start <= h.start && o.end >= h.end && (o.end - o.start) > (h.end - h.start));
+    if (!covered) found.set(h.entry.code, h.entry);
   }
   for (const c of [...unknown]) if (found.has(c)) unknown.delete(c);
   // un code absent mais dont le parent (ex. E150) est connu n'est plus « inconnu »
