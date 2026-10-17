@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scan Halal – additifs et ingrédients</title>
+<meta name="description" content="Scanne un produit ou cherche un additif (E471, gélatine…) : halal, douteux ou haram, avec les avis des savants et les sources.">
+<meta name="theme-color" content="#0F2E2A">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Scan Halal">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main id="app">
+
+  <!-- ACCUEIL -->
+  <section id="home" class="view">
+    <header class="top">
+      <h1>Scan Halal</h1>
+      <p class="lead">Scanne un produit ou cherche un additif.</p>
+    </header>
+
+    <button id="scanBtn" class="scan" type="button">
+      <span class="viewfinder" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></span>
+      <span class="scan-label">Scanner un produit</span>
+    </button>
+
+    <form id="searchForm" class="search" role="search" autocomplete="off">
+      <label class="sr" for="q">Chercher un additif ou un ingrédient</label>
+      <input id="q" type="search" inputmode="search" placeholder="E471, gélatine, vin…" enterkeyhint="search">
+    </form>
+
+    <div class="chips" role="group" aria-label="Filtrer par statut">
+      <button type="button" class="chip on" data-f="tous">Tous</button>
+      <button type="button" class="chip" data-f="halal">Halal</button>
+      <button type="button" class="chip" data-f="douteux">Douteux</button>
+      <button type="button" class="chip" data-f="haram">Haram</button>
+    </div>
+
+    <p id="count" class="count" aria-live="polite"></p>
+    <ul id="list" class="list"></ul>
+    <p id="empty" class="empty" hidden>Aucun résultat. Essaie le numéro seul (471) ou un autre nom.</p>
+
+    <footer class="foot">
+      <p>Les avis viennent de sources publiques, citées à chaque fiche. Ils ne remplacent pas l'avis d'un savant : en cas de doute, demande-lui.</p>
+    </footer>
+  </section>
+
+  <!-- RÉSULTAT PRODUIT -->
+  <section id="result" class="view" hidden>
+    <button class="back" type="button" data-back>&larr; Retour</button>
+    <div id="resultBody"></div>
+  </section>
+
+</main>
+
+<!-- SCANNER -->
+<div id="scanner" class="scanner" hidden>
+  <div class="scanner-bar">
+    <button id="scanClose" type="button" class="light">Fermer</button>
+  </div>
+  <div class="scanner-stage">
+    <video id="video" playsinline muted hidden></video>
+    <div id="reader" hidden></div>
+    <div class="frame" aria-hidden="true"></div>
+  </div>
+  <p id="scanMsg" class="scanner-msg" aria-live="polite">Place le code-barres dans le cadre.</p>
+  <form id="manualForm" class="manual">
+    <label for="manual">Ou tape le numéro du code-barres</label>
+    <div>
+      <input id="manual" inputmode="numeric" pattern="[0-9]{8,14}" placeholder="3017620422003" autocomplete="off">
+      <button type="submit">Chercher</button>
+    </div>
+  </form>
+</div>
+
+<!-- FICHE DÉTAIL -->
+<dialog id="sheet" class="sheet" aria-labelledby="sheetTitle">
+  <div id="sheetBody"></div>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
