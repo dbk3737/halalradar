@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://dbk3737.github.io/scan-halal/sitemap.xml
+Sitemap: https://dbk3737.github.io/Scan-Halal/sitemap.xml
